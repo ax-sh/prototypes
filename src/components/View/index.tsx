@@ -13,7 +13,9 @@ import * as THREE from "three";
 import { BoxHelper } from "three";
 
 // Double Helix
-// A DNA molecule consists of two strands that wind around each other like a twisted ladder. Each strand has a backbone made of alternating groups of sugar (deoxyribose) and phosphate groups. Attached to each sugar is one of four bases: adenine (A), cytosine (C), guanine (G), or thymine (T).
+// A DNA molecule consists of two strands that wind around each other like a twisted ladder.
+// Each strand has a backbone made of alternating groups of sugar (deoxyribose) and phosphate groups.
+// Attached to each sugar is one of four bases: adenine (A), cytosine (C), guanine (G), or thymine (T).
 
 const ViewStyled = styled.section`
   height: 100vh;
@@ -59,59 +61,19 @@ const step = {
 const DNA = () => {
   const ref = React.useRef();
   const mesh = ref;
-  const { camera, size: { width, height } } = useThree();
+  const {
+    camera,
+    size: { width, height },
+  } = useThree();
 
+  useHelper(mesh, BoxHelper, "cyan");
 
-  // useHelper(mesh, BoxHelper, "cyan");
   React.useEffect(() => {
     const o = mesh.current;
     if (!o) return;
-    // const g = o.geometry.computeBoundingBox();
-    // console.log({camera, o, g}, "jj")
-
-
-    // // Just to help others out, I got the desired effect working with an orthographic camera by setting the zoom.
-    // const aabb = new THREE.Box3().setFromObject(o);
-    //
-    // camera.zoom = Math.min(
-    //     width / (aabb.max.x - aabb.min.x),
-    //     height / (aabb.max.y - aabb.min.y)
-    // );
-    // camera.updateProjectionMatrix();
   }, []);
-  // const boundingSphere = o?.geometry.boundingSphere
-  //  const viewWidth = 1000
-  // camera.zoom = viewWidth / ( boundingSphere?.radius * 2 )
-  //
-  // console.log(boundingSphere,"jj")
-  // camera.zoom = -8
-  // camera.updateProjectionMatrix()
-
-  // const aspect = window.innerWidth / window.innerHeight;
-  //
-  // const fov = camera.fov * (Math.PI / 180);
-  //
-  // const objectSize = 0.6 + ( 0.5 * Math.sin( Date.now() * 0.001 ) );
-  //
-  //
-  // const cameraPosition = new THREE.Vector3(
-  //     0,
-  //     o.position.y + Math.abs( objectSize / Math.sin( fov / 2 ) ),
-  //     0
-  // );
-  // console.log({ aspect, fov, objectSize });
-  // camera.position.copy( cameraPosition );
-  // // camera.lookAt( new THREE.Vector3( 0, 0, 0 ) );
-  // // const radius = o.geometry.boundingSphere.radius;
-  // // const aspect = window.width / window.height;
-  // // const distanceFactor = Math.abs((aspect * radius) / Math.sin(camera.fov / 2));
-  // // console.log({ o, camera, distanceFactor, pp:camera.fov });
-  // camera.position.z = 10;
 
   return (
-      <Center alignTop>
-
-
     <mesh ref={ref}>
       {range.map((i) => (
         <Helix
@@ -120,7 +82,7 @@ const DNA = () => {
           rotation={[0, i * -step.rotation, 0]}
         />
       ))}
-    </mesh>   </Center>
+    </mesh>
   );
 };
 
