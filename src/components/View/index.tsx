@@ -4,6 +4,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import {
   Center,
   Cylinder,
+  Html,
   OrbitControls,
   Sphere,
   useAspect,
@@ -44,11 +45,11 @@ const Tube = ({ color }: any) => {
   );
 };
 
-const Helix = ({ color, ...props }: any) => {
+const Helix = ({ color, cylinder, ...props }: any) => {
   return (
     <group {...props}>
       <Ball position={[3, 0, 0]} />
-      <Tube color={color} />
+      {cylinder && <Tube color={color} />}
       <Ball position={[-3, 0, 0]} />
     </group>
   );
@@ -68,7 +69,7 @@ const DNA = () => {
     size: { width, height },
   } = useThree();
 
-  // useHelper(mesh, BoxHelper, "cyan");
+  useHelper(mesh, BoxHelper, "cyan");
 
   React.useEffect(() => {
     const o = mesh.current;
@@ -90,7 +91,7 @@ const DNA = () => {
     camera.position.copy(
       center
         .clone()
-        .add(new THREE.Vector3(1.0 * radius, -1.0 * radius, 1.0 * radius))
+        .add(new THREE.Vector3(-1.0 * radius, 1.0 * radius, 1.0 * radius))
     );
     camera.far = 10 * radius;
     camera.updateProjectionMatrix();
@@ -101,20 +102,26 @@ const DNA = () => {
       axis.position.copy(center);
     }
   }, []);
+  useFrame((t) => {
+    mesh.current.rotation.y +=  Math.sin(t.clock.elapsedTime) * .4;
+    // console.log("dsds", t.clock,)
+    // mesh.current.rotation.y+=.04
+  });
 
   return (
     <>
-      {/*<axesHelper ref={axisRef} />*/}
+      <axesHelper ref={axisRef} />
       <group ref={ref}>
         {range.map((i) => (
           <Helix
             color={COLORS[i % COLORS.length]}
-            position={[1, i * step.vertical, 0]}
+            position={[0, i * step.vertical, 0]}
             rotation={[0, i * -step.rotation, 0]}
+            cylinder
           />
         ))}
       </group>
-      <OrbitControls ref={controlsRef} />
+      <OrbitControls ref={controlsRef} enablePan={false}/>
     </>
   );
 };
@@ -124,7 +131,10 @@ const Helix3D = (props: any) => {
     <ViewStyled {...props}>
       <Canvas mode={"concurrent"}>
         <color attach="background" args={["black"]} />
-        <DNA />
+        <React.Suspense fallback={<Html>LOADING</Html>}>
+          <DNA />
+        </React.Suspense>
+
         {/*<OrbitControls enablePan={false} autoRotate rotateSpeed={5}  />*/}
       </Canvas>
     </ViewStyled>
