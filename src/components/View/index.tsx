@@ -69,7 +69,7 @@ const DNA = () => {
     size: { width, height },
   } = useThree();
 
-  useHelper(mesh, BoxHelper, "cyan");
+  // useHelper(mesh, BoxHelper, "cyan");
 
   React.useEffect(() => {
     const o = mesh.current;
@@ -103,14 +103,17 @@ const DNA = () => {
     }
   }, []);
   useFrame((t) => {
-    mesh.current.rotation.y +=  Math.sin(t.clock.elapsedTime) * .4;
+    const f = Math.sin(t.clock.elapsedTime);
+    mesh.current.rotation.y += f * 0.04;
+    // mesh.current.rotation.x +=  Math.sin(t.clock.elapsedTime) * 90;
+    // mesh.current.rotation.y = (90 * Math.PI) / 180;
     // console.log("dsds", t.clock,)
     // mesh.current.rotation.y+=.04
   });
 
   return (
     <>
-      <axesHelper ref={axisRef} />
+      {/*<axesHelper ref={axisRef} />*/}
       <group ref={ref}>
         {range.map((i) => (
           <Helix
@@ -121,7 +124,7 @@ const DNA = () => {
           />
         ))}
       </group>
-      <OrbitControls ref={controlsRef} enablePan={false}/>
+      <OrbitControls ref={controlsRef} enablePan={false} />
     </>
   );
 };
