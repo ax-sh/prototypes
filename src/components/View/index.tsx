@@ -68,7 +68,7 @@ const DNA = () => {
     size: { width, height },
   } = useThree();
 
-  useHelper(mesh, BoxHelper, "cyan");
+  // useHelper(mesh, BoxHelper, "cyan");
 
   React.useEffect(() => {
     const o = mesh.current;
@@ -104,7 +104,7 @@ const DNA = () => {
 
   return (
     <>
-      <axesHelper ref={axisRef} />
+      {/*<axesHelper ref={axisRef} />*/}
       <group ref={ref}>
         {range.map((i) => (
           <Helix
