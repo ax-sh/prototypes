@@ -60,6 +60,8 @@ const step = {
 };
 const DNA = () => {
   const ref = React.useRef();
+  const axisRef = React.useRef();
+  const controlsRef = React.useRef();
   const mesh = ref;
   const {
     camera,
@@ -70,19 +72,50 @@ const DNA = () => {
 
   React.useEffect(() => {
     const o = mesh.current;
+
     if (!o) return;
+
+    const bbox = new THREE.Box3().setFromObject(o);
+
+    const sphere = bbox.getBoundingSphere(new THREE.Sphere());
+    const { center, radius } = sphere;
+
+    const controls = controlsRef.current as any;
+    if (controls) {
+      controls.reset();
+      controls.target.copy(center);
+      controls.maxDistance = 5 * radius;
+    }
+
+    camera.position.copy(
+      center
+        .clone()
+        .add(new THREE.Vector3(1.0 * radius, -1.0 * radius, 1.0 * radius))
+    );
+    camera.far = 10 * radius;
+    camera.updateProjectionMatrix();
+
+    const axis = axisRef.current as any;
+    if (axis) {
+      axis.scale.set(radius, radius, radius);
+      axis.position.copy(center);
+    }
   }, []);
 
   return (
-    <mesh ref={ref}>
-      {range.map((i) => (
-        <Helix
-          color={COLORS[i % COLORS.length]}
-          position={[1, i * step.vertical, 0]}
-          rotation={[0, i * -step.rotation, 0]}
-        />
-      ))}
-    </mesh>
+    <>
+      <axesHelper ref={axisRef} />
+      <group ref={ref}>
+        {range.map((i) => (
+          <Helix
+            color={COLORS[i % COLORS.length]}
+            position={[1, i * step.vertical, 0]}
+            rotation={[0, i * -step.rotation, 0]}
+          />
+        ))}
+      </group>
+      <OrbitControls ref={controlsRef} />
+    </>
   );
 };
 
