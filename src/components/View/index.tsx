@@ -104,7 +104,9 @@ const DNA = () => {
   }, []);
   useFrame((t) => {
     const f = Math.sin(t.clock.elapsedTime);
-    mesh.current.rotation.y += f * 0.04;
+    if(!mesh.current)return
+    // @ts-ignore
+    mesh.current.rotation.y += f * 0.4;
     // mesh.current.rotation.x +=  Math.sin(t.clock.elapsedTime) * 90;
     // mesh.current.rotation.y = (90 * Math.PI) / 180;
     // console.log("dsds", t.clock,)
@@ -120,7 +122,7 @@ const DNA = () => {
             color={COLORS[i % COLORS.length]}
             position={[0, i * step.vertical, 0]}
             rotation={[0, i * -step.rotation, 0]}
-            cylinder
+            // cylinder
           />
         ))}
       </group>
