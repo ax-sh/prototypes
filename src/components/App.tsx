@@ -5,7 +5,9 @@ import View from "./View";
 function App() {
   return (
     <div className="App">
-      <View />
+      <div className="bg-white">tailwind with windycss</div>
+
+      {/* <View /> */}
     </div>
   );
 }
